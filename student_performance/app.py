@@ -3,8 +3,9 @@ import pandas as pd
 import joblib
 
 # Load Model & Pipeline
-model = joblib.load("student_performance/model.pkl")
-pipeline = joblib.load("student_performance/pipeline.pkl")
+model = joblib.load("model.pkl")
+
+pipeline = joblib.load("pipeline.pkl")
 
 st.title("🎓 Student Performance Predictor")
 
