@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent
 
 # Load Model & Pipeline
 model = joblib.load(BASE_DIR / "model.pkl")
-pipeline = joblib.load(BASE_DIR / "pipeline.pkl")
+# pipeline = joblib.load(BASE_DIR / "pipeline.pkl")
 
 st.title("🎓 Student Performance Predictor")
 
@@ -46,8 +46,23 @@ input_data = pd.DataFrame([{
 
 # --- PREDICT ---
 if st.button("Predict Final Grade"):
-    transformed = pipeline.transform(input_data)
-    prediction = model.predict(transformed)
+
+    # Encode categorical columns manually
+    input_data["Gender"] = input_data["Gender"].map({
+        "Male": 1,
+        "Female": 0
+    })
+
+    input_data["Parental_Support"] = input_data["Parental_Support"].map({
+        "Low": 0,
+        "Medium": 1,
+        "High": 2
+    })
+
+    input_data["Online_Classes"] = input_data["Online_Classes"].astype(int)
+
+    prediction = model.predict(input_data)
+
     st.success(f"📘 Predicted Final Grade: **{prediction[0]:.2f}**")
     if prediction < 50:
         category = "Low"
