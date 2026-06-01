@@ -53,28 +53,30 @@ if st.button("Predict Final Grade"):
         "Female": 0
     })
 
-    input_data["Parental_Support"] = input_data["Parental_Support"].map({
+    input_data["ParentalSupport"] = input_data["ParentalSupport"].map({
         "Low": 0,
         "Medium": 1,
         "High": 2
     })
 
-    input_data["Online_Classes"] = input_data["Online_Classes"].astype(int)
+    input_data["Online Classes Taken"] = input_data["Online Classes Taken"].astype(int)
 
     prediction = model.predict(input_data)
+    predicted_value = prediction[0]
 
-    st.success(f"📘 Predicted Final Grade: **{prediction[0]:.2f}**")
-    if prediction < 50:
+    st.success(f"📘 Predicted Final Grade: **{predicted_value:.2f}**")
+
+    if predicted_value < 50:
         category = "Low"
-    elif prediction < 70:
+    elif predicted_value < 70:
         category = "Medium"
-    elif prediction < 85:
+    elif predicted_value < 85:
         category = "Good"
     else:
         category = "Excellent"
 
     st.info(f"Performance Category: **{category}**")
-
+    
 st.sidebar.title("📚 Student Performance Predictor")
 st.sidebar.write("Mini Project - BTech  AIML")
 st.sidebar.write("Submitted by: Imteyaz alam")
