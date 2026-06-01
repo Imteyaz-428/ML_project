@@ -1,12 +1,15 @@
 # redeploy fix
 import streamlit as st
 import pandas as pd
+from pathlib import Path
 import joblib
 
-# Load Model & Pipeline
-model = joblib.load("model.pkl")
+# Get current file directory
+BASE_DIR = Path(__file__).resolve().parent
 
-pipeline = joblib.load("pipeline.pkl")
+# Load Model & Pipeline
+model = joblib.load(BASE_DIR / "model.pkl")
+pipeline = joblib.load(BASE_DIR / "pipeline.pkl")
 
 st.title("🎓 Student Performance Predictor")
 
