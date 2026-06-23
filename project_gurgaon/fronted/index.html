@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Predictor</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f4f4;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+        }
+    
+        .container{
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            width:500px;
+            box-shadow:0 0 10px rgba(0,0,0,0.2);
+        }
+    
+        h2{
+            text-align:center;
+        }
+    
+        input, select{
+            width:100%;
+            padding:10px;
+            margin:8px 0;
+        }
+    
+        button{
+            width:100%;
+            padding:12px;
+            background:#007bff;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+    
+        button:hover{
+            background:#0056b3;
+        }
+    
+        #result{
+            margin-top:20px;
+            font-size:20px;
+            text-align:center;
+            font-weight:bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>House Price Predictor</h2>
+
+        <select id="status">
+            <option>Ready to Move</option>
+            <option>Under Construction</option>
+        </select>
+        
+        <input type="number" id="area" placeholder="Area">
+        
+        <input type="number" id="rate" placeholder="Rate Per Sqft">
+        
+        <input type="text" id="propertyType" placeholder="Property Type">
+        
+        <input type="text" id="locality" placeholder="Locality">
+        
+        <input type="text" id="rera" placeholder="RERA Approval">
+        
+        <input type="number" id="bhk" placeholder="BHK Count">
+        
+        <select id="flatType">
+            <option>Apartment</option>
+            <option>Villa</option>
+            <option>Plot</option>
+        </select>
+        
+        <button onclick="predictPrice()">Predict Price</button>
+        
+        <div id="result"></div>
+    </div>
+    <script>
+
+        async function predictPrice(){
+        
+            const payload = {
+                Status: document.getElementById("status").value,
+                Area: parseInt(document.getElementById("area").value),
+                Rate_per_sqft: parseInt(document.getElementById("rate").value),
+                Property_Type: document.getElementById("propertyType").value,
+                Locality: document.getElementById("locality").value,
+                RERA_Approval: document.getElementById("rera").value,
+                BHK_Count: parseInt(document.getElementById("bhk").value),
+                Flat_type: document.getElementById("flatType").value
+            };
+        
+            const response = await fetch("http://127.0.0.1:8000/predict", {
+                method: "POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+        
+            const data = await response.json();
+        
+            document.getElementById("result").innerHTML =
+                "Predicted Price: ₹ " + Number(data["predicted price "]).toLocaleString();
+        }
+        
+        </script>
+    </body>
+    </html>
+            

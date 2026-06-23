@@ -6,7 +6,7 @@ import json
 import re
 from schemas.user import User, User_update
 
-from crud.user import create_user, update_user, delete_user, get_user
+from crud.user import create_user, update_user, delete_user, get_user,login
 
 
 
@@ -85,11 +85,11 @@ router = APIRouter()
 #     # return response
 #     return JSONResponse(status_code=201,content={"message": "user data added successfully"})
 
-@router.post('/create', response_model=User) 
+@router.post('/Register', response_model=User) 
 def add_user(user : User) :
     return create_user(user)
 
-@router.get('/get') 
+@router.get('/Profile') 
 def get_users(Email: EmailStr) :
     return get_user(Email)
 
@@ -100,3 +100,7 @@ def update_users(Email: EmailStr, user: User_update) :
 @router.delete('/delete')
 def delete_users(Email: EmailStr) :
     return delete_user(Email)
+
+@router.post('/login') 
+def login_user(user : User_update) :
+    return login(user.Email, user.password)

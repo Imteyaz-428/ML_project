@@ -13,40 +13,12 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
+from utils.feature_engineering import RealEstateFeatureEngineer
 
-MODEL_FILE = "model.pkl"
+MODEL_FILE = "model/model.pkl"
 PIPELINE_FILE = "pipleline.pkl"
 
-class RealEstateFeatureEngineer(BaseEstimator, TransformerMixin):
 
-    def __init__(self):
-        pass
-
-    def fit(self, X, y=None):
-
-        X = X.copy()
-
-        self.property_freq = X["Property Type"].value_counts()
-        self.locality_freq = X["Locality"].value_counts()
-
-        return self
-
-    def transform(self, X):
-
-        X = X.copy()
-
-        X["Property_Type_freq"] = X["Property Type"].map(self.property_freq)
-        X["Locality_freq"] = X["Locality"].map(self.locality_freq)
-
-        X["BHK"] = X["Property Type"].str.extract(r'(\d+)').astype(float)
-
-        X["Main_Type"] = X["Property Type"].str.extract(
-            r'(Apartment|Floor|Plot|Villa|House|Penthouse)'
-        )
-
-        X.drop(["Property Type", "Locality"], axis=1, inplace=True)
-
-        return X 
     
 
 def build_pipeline(num_attribute, cat_attribute) :
@@ -85,7 +57,7 @@ if not os.path.exists(MODEL_FILE):
     # TRAINING PHASE
     
     #1 load the data 
-    df = pd.read_csv("data of gurugram real Estate.csv")
+    df = pd.read_csv("data/data of gurugram real Estate.csv")
 
     # 2 data cleaning step
     df["Price"] = df["Price"].str.replace(",", "")
@@ -119,7 +91,7 @@ if not os.path.exists(MODEL_FILE):
     labels_train = strat_train_set["Log_Price"]
     
     # Save test set separately if you want
-    strat_test_set.to_csv("input.csv", index=False)
+    strat_test_set.to_csv("data/input.csv", index=False)
    
    
     numeric_features = [
@@ -148,12 +120,12 @@ else :
     model = joblib.load(MODEL_FILE)
     
     
-    input_data = pd.read_csv("input.csv")
+    input_data = pd.read_csv("data/input.csv")
     
     pred_log = model.predict(input_data)
     pred_price = np.expm1(pred_log)
     input_data["predicted_price"] = pred_price
-    input_data.to_csv("output.csv", index=False)
+    input_data.to_csv("data/output.csv", index=False)
     print("Inference complete. Results saved to output.csv")
     
     

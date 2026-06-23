@@ -72,3 +72,20 @@ def delete_user(Email : EmailStr) :
     session.commit()
     
     return {"message " :"user data deleted succussfully"}
+
+def login(Email :EmailStr, password:str) :
+    db_user = session.query(Users).filter_by(Email=Email).first()
+    if not db_user :
+        raise HTTPException(
+            status_code=404,
+            detail="please put correct email"
+        )
+        
+    if(db_user.password != password) :
+        raise HTTPException(
+            status_code=404,
+            detail="please enter correct password"
+        )
+        
+    return db_user
+    
