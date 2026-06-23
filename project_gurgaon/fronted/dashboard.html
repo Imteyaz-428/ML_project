@@ -57,10 +57,15 @@
     <div class="container">
         <h2>House Price Predictor</h2>
 
+        <button onclick="goHistory()">
+            Prediction History
+        </button>
+
         <select id="status">
             <option>Ready to Move</option>
             <option>Under Construction</option>
         </select>
+
         
         <input type="number" id="area" placeholder="Area">
         
@@ -83,8 +88,17 @@
         <button onclick="predictPrice()">Predict Price</button>
         
         <div id="result"></div>
+
+        <button onclick="logout()">
+            Logout
+        </button>
     </div>
+    
     <script>
+        if(!localStorage.getItem("token")){
+            alert("Please Login First");
+            window.location.href = "login.html";
+        }
 
         async function predictPrice(){
         
@@ -98,19 +112,34 @@
                 BHK_Count: parseInt(document.getElementById("bhk").value),
                 Flat_type: document.getElementById("flatType").value
             };
+            
         
-            const response = await fetch("http://127.0.0.1:8000/predict", {
-                method: "POST",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body: JSON.stringify(payload)
-            });
+            const response = await fetch(
+                "http://127.0.0.1:8000/predict",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization":
+                            `Bearer ${localStorage.getItem("token")}`
+                    },
+                    body: JSON.stringify(payload)
+                }
+            );
         
             const data = await response.json();
-        
+
+            console.log("Response =", data);
+            
             document.getElementById("result").innerHTML =
-                "Predicted Price: ₹ " + Number(data["predicted price "]).toLocaleString();
+                "Predicted Price: ₹ " + data["predicted price"];
+        }
+        function goHistory(){
+            window.location.href="history.html";
+        }
+        function logout(){
+            localStorage.removeItem("token");
+            window.location.href="login.html";
         }
         
         </script>

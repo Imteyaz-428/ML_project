@@ -147,6 +147,7 @@ rmse_original = np.sqrt(mean_squared_error(actual_price, pred_price))
 print("RMSE (Log scale):", rmse)
 print("RMSE (Original Price):", rmse_original)
 
+
 # print("Train RMSE:",
 #       np.sqrt(mean_squared_error(
 #           labels_train,

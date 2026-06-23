@@ -1,7 +1,13 @@
 fastapi
 uvicorn
+sqlalchemy
+pymysql
 pandas
 numpy
-scikit-learn
+scikit-learn==1.6.1
 joblib
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
 pydantic
+email-validator

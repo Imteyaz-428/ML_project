@@ -128,6 +128,11 @@ else :
     input_data.to_csv("data/output.csv", index=False)
     print("Inference complete. Results saved to output.csv")
     
+import joblib
+
+joblib.dump(model, "model.pkl")
+print("Model saved successfully")
+    
     
     
 

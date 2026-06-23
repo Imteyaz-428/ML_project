@@ -25,3 +25,5 @@ class RealEstateFeatureEngineer(BaseEstimator, TransformerMixin):
         X.drop(["Property Type", "Locality"], axis=1, inplace=True)
 
         return X
+    
+

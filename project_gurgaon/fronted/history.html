@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction History</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f4f4;
+            padding:20px;
+        }
+
+        .container{
+            max-width:1000px;
+            margin:auto;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,0.2);
+        }
+
+        h2{
+            text-align:center;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        th, td{
+            border:1px solid #ddd;
+            padding:12px;
+            text-align:center;
+        }
+
+        th{
+            background:#007bff;
+            color:white;
+        }
+
+        tr:nth-child(even){
+            background:#f2f2f2;
+        }
+
+        button{
+            padding:10px 20px;
+            border:none;
+            cursor:pointer;
+            color:white;
+            margin:5px;
+        }
+
+        .back-btn{
+            background:#28a745;
+        }
+
+        .logout-btn{
+            background:#dc3545;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Prediction History</h2>
+
+    <button class="back-btn" onclick="goDashboard()">
+        Dashboard
+    </button>
+
+    <button class="logout-btn" onclick="logout()">
+        Logout
+    </button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Locality</th>
+                <th>BHK</th>
+                <th>Area</th>
+                <th>Predicted Price</th>
+            </tr>
+        </thead>
+
+        <tbody id="historyTable">
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+
+if(!localStorage.getItem("token")){
+    alert("Please Login First");
+    window.location.href = "login.html";
+}
+
+async function loadHistory(){
+
+    try{
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/history",
+            {
+                method:"GET",
+                headers:{
+                    "Authorization":
+                    `Bearer ${localStorage.getItem("token")}`
+                }
+            }
+        );
+
+        if(response.status === 401){
+
+            alert("Session Expired");
+
+            localStorage.removeItem("token");
+
+            window.location.href = "login.html";
+
+            return;
+        }
+
+        const data = await response.json();
+
+        let rows = "";
+
+        data.forEach(item => {
+
+            rows += `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.locality}</td>
+                    <td>${item.bhk}</td>
+                    <td>${item.area}</td>
+                    <td>₹ ${Number(item.predicted_price).toLocaleString()}</td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("historyTable").innerHTML = rows;
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("Unable to load history");
+    }
+}
+
+function goDashboard(){
+    window.location.href = "dashboard.html";
+}
+
+function logout(){
+
+    localStorage.removeItem("token");
+
+    window.location.href = "login.html";
+}
+
+loadHistory();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f4f4;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+        }
+
+        .container{
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            width:400px;
+            box-shadow:0 0 10px rgba(0,0,0,0.2);
+        }
+
+        h2{
+            text-align:center;
+        }
+
+        input{
+            width:100%;
+            padding:10px;
+            margin:10px 0;
+            box-sizing:border-box;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#007bff;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#0056b3;
+        }
+
+        #message{
+            margin-top:15px;
+            text-align:center;
+            font-weight:bold;
+        }
+
+        a{
+            text-decoration:none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Create Account</h2>
+
+    <input
+        type="text"
+        id="name"
+        placeholder="Full Name"
+    >
+
+    <input
+        type="email"
+        id="email"
+        placeholder="Email"
+    >
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Password"
+    >
+
+    <button onclick="registerUser()">
+        Register
+    </button>
+
+    <p style="text-align:center;margin-top:15px;">
+        Already have an account?
+        <a href="login.html">Login</a>
+    </p>
+
+    <div id="message"></div>
+
+</div>
+
+<script>
+
+async function registerUser(){
+
+    const payload = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+    };
+
+    const response = await fetch(
+        "http://127.0.0.1:8000/register",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify(payload)
+        }
+    );
+
+    const data = await response.json();
+
+    if(response.ok){
+
+        document.getElementById("message").innerHTML =
+            "Registration Successful! Redirecting...";
+
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1500);
+
+    } else {
+
+        document.getElementById("message").innerHTML =
+            data.detail || "Registration Failed";
+
+    }
+}
+
+</script>
+
+</body>
+</html>
