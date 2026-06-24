@@ -15,6 +15,9 @@ from utils.hash import verify_password
 import pandas as pd;
 from fastapi.middleware.cors import CORSMiddleware
 
+import bcrypt
+print(bcrypt.__version__)
+
 app = FastAPI()
 from database.database import engine, Base
 
@@ -182,3 +185,4 @@ def history(
     )
 
     return predictions
+

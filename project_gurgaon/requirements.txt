@@ -8,6 +8,7 @@ scikit-learn==1.6.1
 joblib
 python-jose[cryptography]
 passlib[bcrypt]
+bcrypt==4.0.1
 python-multipart
 pydantic
 email-validator
