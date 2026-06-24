@@ -1,15 +1,18 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+import os
 
-# MySQL URL
-DATABASE_URL = "mysql+pymysql://root:Password@host.docker.internal:3306/gurgaon_db"
+# MySQL Uimport os
 
-# Create Engine
+DATABASE_URL = os.getenv("DATABASE_URL")
+
 engine = create_engine(
     DATABASE_URL,
-    echo=True
+    echo=True,
+    connect_args={
+        "ssl": {}
+    }
 )
-
 # Session Factory
 SessionLocal = sessionmaker(
     autocommit=False,

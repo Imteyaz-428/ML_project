@@ -130,7 +130,7 @@ else :
     
 import joblib
 
-joblib.dump(model, "model.pkl")
+joblib.dump(model, MODEL_FILE,compress=9)
 print("Model saved successfully")
     
     

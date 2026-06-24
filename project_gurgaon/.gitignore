@@ -3,4 +3,7 @@ __pycache__/
 .ipynb_checkpoints/
 venv/
 .env
---init__.py 
+--init__.py \
+echo "Imteyaz@428" >> .gitignore
+echo "Imteyaz@428.pub" >> .gitignoreImteyaz@428
+Imteyaz@428.pub
