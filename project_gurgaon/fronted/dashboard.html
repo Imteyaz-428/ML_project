@@ -54,6 +54,9 @@
     </style>
 </head>
 <body>
+    <div>
+      
+    </div>
     <div class="container">
         <h2>House Price Predictor</h2>
 
@@ -99,8 +102,10 @@
             alert("Please Login First");
             window.location.href = "login.html";
         }
+        
 
-        async function predictPrice(){
+        
+            async function predictPrice(){
         
             const payload = {
                 Status: document.getElementById("status").value,

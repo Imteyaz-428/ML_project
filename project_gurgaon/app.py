@@ -161,13 +161,12 @@ def login(
     
 @app.get("/profile")
 def profile(
-    current_user: str = Depends(get_current_user)
+    current_user: Users = Depends(get_current_user)
 ):
     return {
-        "email": current_user
+        "email": current_user.Email,
+        "name": current_user.Name
     }
-    
-    
 @app.get("/history")
 def history(
     current_user: str = Depends(get_current_user),
