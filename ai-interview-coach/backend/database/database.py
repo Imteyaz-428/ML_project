@@ -12,3 +12,10 @@ SessionLocal  = sessionmaker(
     bind = engine
 )
 session = SessionLocal()
+from models.user import Base
+from models.user import Users
+from models.interview import Interview
+from models.question import Question
+from models.report import InterviewReport
+from models.resume import Resume
+Base.metadata.create_all(bind=engine)

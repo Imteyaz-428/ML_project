@@ -1,7 +1,6 @@
-from fastapi import FastAPI, Path, HTTPException
 from pydantic import BaseModel, Field, EmailStr
 from typing import Annotated,Literal,Optional
-import json
+
  
 class User(BaseModel) :
     Email : EmailStr
@@ -20,3 +19,9 @@ class User_update(BaseModel) :
     Trade : Annotated[Optional[str], Field(default=None)]
     password : Annotated[Optional[str], Field(default=None)]
     
+class UserResponse(BaseModel):
+    Email: EmailStr
+    Name: str
+    Age: int
+    Gender: str
+    Trade: str

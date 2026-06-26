@@ -4,7 +4,8 @@ from pydantic import EmailStr
 from schemas.user import User, User_update
 from models.user import Users
 from sqlalchemy.exc import IntegrityError
-
+from utils.security import hash_password, verify_password
+from utils.jwt import create_access_token
 
 def create_user(user_data : User) :
     try:
@@ -14,7 +15,7 @@ def create_user(user_data : User) :
             Age = user_data.Age,
             Gender = user_data.Gender,
             Trade = user_data.Trade,
-            password = user_data.password   
+            password=hash_password(user_data.password)  
         )
         
         session.add(user)
@@ -39,6 +40,9 @@ def update_user(email: EmailStr,user_data : User_update) :
         )
     
     update_data = user_data.model_dump(exclude_unset=True)
+
+    if "password" in update_data:
+        update_data["password"] = hash_password(update_data["password"])
 
     for key, value in update_data.items():
         setattr(db_user, key, value)
@@ -73,19 +77,28 @@ def delete_user(Email : EmailStr) :
     
     return {"message " :"user data deleted succussfully"}
 
-def login(Email :EmailStr, password:str) :
+def login(Email: EmailStr, password: str):
     db_user = session.query(Users).filter_by(Email=Email).first()
-    if not db_user :
+
+    if not db_user:
         raise HTTPException(
             status_code=404,
-            detail="please put correct email"
+            detail="Please enter correct email"
         )
-        
-    if(db_user.password != password) :
+
+    if not verify_password(password, db_user.password):
         raise HTTPException(
-            status_code=404,
-            detail="please enter correct password"
+            status_code=401,
+            detail="Invalid Email or password"
         )
-        
-    return db_user
+    
+
+    token = create_access_token(
+        {"sub": db_user.Email}
+    )
+
+    return {
+        "access_token": token,
+        "token_type": "bearer"
+    }
     
