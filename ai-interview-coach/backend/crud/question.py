@@ -12,10 +12,15 @@ import traceback
 
 def create_questions(interview_id: int, questions: list[str]):
     try:
-        for q in questions:
+        for q in questions["questions"]:
             question = Question(
                 interview_id=interview_id,
-                question=q
+                question=q["question"],
+                category=q["category"],
+                follow_up=q["follow_up"],
+                expected_answer_points=q["expected_answer_points"],
+                difficulty=q["difficulty_tag"],
+                time_limit=q["time_limit_minutes"]
             )
             session.add(question)
 
@@ -52,7 +57,27 @@ def get_next_question(interview_id: int,current_user: Users):
     
     if not question :
         raise HTTPException(status_code=404,detail="Interview completed.")
-    return question
+    
+    
+    current_question = (
+    session.query(Question)
+        .filter(
+            Question.interview_id == interview_id,
+            Question.id <= question.id
+        )
+        .count()
+    )
+
+    return {
+        "id": question.id,
+        "company": interview.company,
+        "role": interview.role,
+        "current_question": current_question,
+        "total_questions": interview.no_of_questions,
+        "category": question.category,
+        "difficulty_tag": question.difficulty,
+        "question": question.question
+    }
 
 
 
@@ -148,20 +173,35 @@ def submit_answer(
                 "evaluation": evaluation,
                 "report": report
             }
+        if next_question:
+
+            current_question = (
+                session.query(Question)
+                .filter(
+                    Question.interview_id == interview.id,
+                    Question.id <= next_question.id
+                )
+                .count()
+            )
+
+            next_question_data = {
+                "id": next_question.id,
+                "company": interview.company,
+                "role": interview.role,
+                "current_question": current_question,
+                "total_questions": interview.no_of_questions,
+                "category": next_question.category,
+                "difficulty_tag": next_question.difficulty,
+                "question": next_question.question
+            }
+
+        else:
+            next_question_data = None
 
         # 8. Return Response
         return {
             "evaluation": evaluation,
-
-            "next_question": (
-                {
-                    "id": next_question.id,
-                    "question": next_question.question
-                }
-                if next_question
-                else None
-            ),
-
+            "next_question": next_question_data,
             "completed": next_question is None
         }
 

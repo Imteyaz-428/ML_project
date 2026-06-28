@@ -14,3 +14,5 @@ class InterviewCreate(BaseModel):
         "Medium",
         "Hard"
     ]
+    interview_type : str
+    no_of_questions : int

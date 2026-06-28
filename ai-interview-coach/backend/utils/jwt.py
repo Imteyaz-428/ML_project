@@ -6,7 +6,7 @@ SECRET_KEY = "your_super_secret_key"
 
 ALGORITHM = "HS256"
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 300
 
 
 def create_access_token(data: dict):
@@ -27,17 +27,24 @@ def create_access_token(data: dict):
 
     return token
 
+from jose import jwt, JWTError
+
 def verify_access_token(token: str):
 
-    try:
+    print("Received Token:", token)
 
+    try:
         payload = jwt.decode(
             token,
             SECRET_KEY,
             algorithms=[ALGORITHM]
         )
 
+        print("Payload:", payload)
+
         email = payload.get("sub")
+
+        print("Email:", email)
 
         if email is None:
             raise HTTPException(
@@ -47,7 +54,9 @@ def verify_access_token(token: str):
 
         return email
 
-    except JWTError:
+    except JWTError as e:
+
+        print("JWT ERROR:", e)
 
         raise HTTPException(
             status_code=401,

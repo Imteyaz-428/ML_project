@@ -34,7 +34,7 @@ def generate_final_report(interview_id: int):
         )
 
     # Calculate Overall Score
-    total_score = sum(question.score for question in questions)
+    total_score = sum(question.score or 0 for question in questions)
 
     overall_score = round(
         total_score / len(questions),
@@ -58,7 +58,7 @@ def generate_final_report(interview_id: int):
 
             "score": question.score,
 
-            "feedback": question.feedback,
+            "feedback": question.ai_feedback,
 
             "strengths": question.strengths,
 

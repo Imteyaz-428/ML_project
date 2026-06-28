@@ -15,6 +15,8 @@ class Interview(Base) :
     difficulty = Column(String(20))
     created_at = Column(DateTime, default=datetime.utcnow)
     user_email = Column(String(30),ForeignKey("user_info.Email"), nullable=False)
+    interview_type = Column(String(30))
+    no_of_questions = Column(Integer)
     user = relationship( "Users", back_populates="interviews")
     
     questions = relationship( "Question",back_populates="interview")

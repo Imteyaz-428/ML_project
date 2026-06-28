@@ -43,8 +43,9 @@ def create_interview(
             company=interview_data.company,
             role=interview_data.role,
             difficulty=interview_data.difficulty,
-            user_email=current_user.Email
-        )
+            user_email=current_user.Email,
+            interview_type=interview_data.interview_type,
+            no_of_questions=interview_data.no_of_questions)
 
         session.add(interview)
 
@@ -59,7 +60,9 @@ def create_interview(
                 parsed_resume=parsed_resume,
                 company=interview_data.company,
                 role=interview_data.role,
-                difficulty=interview_data.difficulty
+                difficulty=interview_data.difficulty,
+                interview_type=interview_data.interview_type,
+                no_of_questions=interview_data.no_of_questions
             )
 
         except Exception as e:
@@ -94,3 +97,19 @@ def create_interview(
 def get_my_interviews(current_user: Users):
 
     return current_user.interviews
+
+
+def get_interview(
+    interview_id: int,
+    current_user: Users
+):
+    interview = (
+        session.query(Interview)
+        .filter_by( id=interview_id,user_email=current_user.Email ).first())
+
+    if not interview:
+        raise HTTPException(
+            status_code=404,
+            detail="Interview not found."
+        )
+    return interview
