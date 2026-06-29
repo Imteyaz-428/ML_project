@@ -98,7 +98,11 @@ def get_my_resume(current_user: Users):
     if not resume:
         raise HTTPException(status_code=404, detail="Resume not found" )
     
-    return resume
+    
+    return {
+        "resume_path": resume.resume_path,
+        "analysis": resume.parsed_data
+    }
 
 
 

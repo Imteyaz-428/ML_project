@@ -19,6 +19,7 @@ def get_report(
     interview_id: int,
     current_user: Users = Depends(get_current_user)
 ):
+    
     return get_interview_report(
         interview_id,
         current_user

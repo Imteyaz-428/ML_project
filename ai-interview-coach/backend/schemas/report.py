@@ -1,14 +1,30 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Dict
+from datetime import datetime
 
 
 class InterviewReportResponse(BaseModel):
-    interview_id: int
+    company: str
+    role: str
+    difficulty: str
+
     overall_score: float
-    performance: str
+
+    summary: str
+    overall_feedback: str
+
+    strong_domains: List[Dict]
+    weak_domains: List[Dict]
+
     strengths: List[str]
     weaknesses: List[str]
-    recommendation: str
+    weak_skills: List[str]
+    recommendations: List[str]
+
     hiring_decision: str
+    hiring_justification: str
+
+    created_at: datetime
+
     class Config:
         from_attributes = True

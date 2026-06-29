@@ -10,19 +10,24 @@ from schemas.interview import InterviewCreate
 
 from services.question_generator import generate_questions
 from crud.question import create_questions
-
+from utils.logger import logger
 
 def create_interview(
     interview_data: InterviewCreate,
     current_user: Users
 ):
-
+    logger.info(
+        f"Creating interview for {current_user.Email}"
+    )
     # 1. Check if resume exists
     resume = session.query(Resume).filter_by(
         user_email=current_user.Email
     ).first()
 
     if not resume:
+        logger.warning(
+            f"Resume not found for {current_user.Email}"
+        )
         raise HTTPException(
             status_code=404,
             detail="Please upload your resume first."
@@ -36,6 +41,7 @@ def create_interview(
     parsed_resume = resume.parsed_data
 
     try:
+        
 
         # 2. Create Interview
         interview = Interview(
@@ -55,7 +61,7 @@ def create_interview(
       
 
         try:
-
+            logger.info("Generating interview questions")
             questions = generate_questions(
                 parsed_resume=parsed_resume,
                 company=interview_data.company,
@@ -64,12 +70,17 @@ def create_interview(
                 interview_type=interview_data.interview_type,
                 no_of_questions=interview_data.no_of_questions
             )
+            logger.info("Interview questions generated")
 
         except Exception as e:
 
+            logger.exception(
+                f"Question generation failed: {e}"
+            )
+
             raise HTTPException(
                 status_code=500,
-                detail=f"Question generation failed: {str(e)}"
+                detail="Failed to generate interview questions."
             )
 
         # 5. Save Questions
@@ -84,17 +95,30 @@ def create_interview(
 
         return interview
 
+    except HTTPException:
+
+        session.rollback()
+
+        raise
+
     except Exception as e:
 
         session.rollback()
 
-        raise HTTPException(
-            status_code=500,
-            detail=f"Interview creation failed: {str(e)}"
+        logger.exception(
+            f"Interview creation failed: {e}"
         )
 
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to create interview."
+        )
 
 def get_my_interviews(current_user: Users):
+
+    logger.info(
+        f"Fetching interviews for {current_user.Email}"
+    )
 
     return current_user.interviews
 
@@ -108,8 +132,49 @@ def get_interview(
         .filter_by( id=interview_id,user_email=current_user.Email ).first())
 
     if not interview:
+        logger.warning(
+            f"Interview {interview_id} not found for {current_user.Email}"
+        )
         raise HTTPException(
             status_code=404,
             detail="Interview not found."
         )
+    logger.info(
+        f"Interview {interview_id} fetched successfully"
+    )
     return interview
+
+
+from database.database import session
+from models.interview import Interview
+from models.report import InterviewReport
+
+def get_all_interviews(current_user):
+
+    interviews = (
+        session.query(Interview)
+        .filter(Interview.user_email == current_user.Email)
+        .order_by(Interview.created_at.desc())
+        .all()
+    )
+
+    result = []
+
+    for interview in interviews:
+
+        report = (
+            session.query(InterviewReport)
+            .filter_by(interview_id=interview.id)
+            .first()
+        )
+
+        result.append({
+            "id": interview.id,
+            "company": interview.company,
+            "role": interview.role,
+            "difficulty": interview.difficulty,
+            "overall_score": report.overall_score if report else None,
+            "created_at": interview.created_at
+        })
+
+    return result

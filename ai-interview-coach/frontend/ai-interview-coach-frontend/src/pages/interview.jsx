@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
 
 import QuestionCard from "../components/QuestionCard";
 import AnswerBox from "../components/AnswerBox";
 import FeedbackCard from "../components/FeedbackCard";
 
+
+
 function Interview() {
     const [pageLoading, setPageLoading] = useState(true);
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const [question, setQuestion] = useState(null);
     const [feedback, setFeedback] = useState(null);
@@ -85,7 +88,11 @@ function Interview() {
             if (response.data.completed) {
 
                 alert("Interview Completed!");
-
+            
+                navigate(`/report/${id}`);
+            
+                return;
+            
             } else {
 
                 setTimeout(() => {
@@ -145,7 +152,7 @@ function Interview() {
                     marginTop: "100px"
                 }}
             >
-                <h2>navigate(`/report/${id}`); 🎉</h2>
+                <h2>Interview Completed</h2>
             </div>
         );
     

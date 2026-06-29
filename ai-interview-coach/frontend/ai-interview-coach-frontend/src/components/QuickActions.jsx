@@ -46,9 +46,9 @@ function QuickActions() {
 
                 <ActionCard
                     icon="📊"
-                    title="Reports"
-                    description="View your interview reports."
-                    onClick={() => navigate("/reports")}
+                    title="My Interviews"
+                    description="View all interviews and reports."
+                    onClick={() => navigate("/interviews")}
                 />
 
                 <ActionCard

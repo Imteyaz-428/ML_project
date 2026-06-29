@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-
+from utils.logger import logger
 from models.user import Users
 from utils.oauth2 import get_current_user
 
@@ -40,7 +40,7 @@ def submit(
     answer: QuestionAnswer,
     current_user: Users = Depends(get_current_user)
 ):
-
+    logger.info("answer submitted start")
     return submit_answer(
         question_id,
         answer,

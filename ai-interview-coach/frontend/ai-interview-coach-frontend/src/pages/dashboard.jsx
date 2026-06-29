@@ -16,30 +16,36 @@ function Dashboard() {
 
     async function fetchProfile() {
 
+        console.log("1. fetchProfile started");
+    
         try {
-
+    
             const response = await api.get("/Profile");
-
+    
+            console.log("2. API Success");
+            console.log(response.data);
+    
             setUser(response.data);
-
+    
         }
-
+    
         catch (error) {
-
+    
+            console.log("3. API Error");
             console.log(error);
-
+    
             localStorage.removeItem("token");
-
             navigate("/login");
-
+    
         }
-
+    
         finally {
-
+    
+            console.log("4. finally executed");
+    
             setLoading(false);
-
+    
         }
-
     }
 
     useEffect(() => {

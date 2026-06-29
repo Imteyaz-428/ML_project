@@ -59,7 +59,7 @@ function RecentInterviewCard({
             </p>
 
             <button
-                onClick={() => navigate(`/report/${interviewId}`)}
+                onClick={() => navigate('/report')}
                 style={{
                     width: "100%",
                     marginTop: "15px",

@@ -3,13 +3,16 @@ import { useParams } from "react-router-dom";
 
 import api from "../services/api";
 
-import ReportHeader from "../components/ReportHeader";
-import ScoreCards from "../components/ScoreCards";
-import OverallFeedback from "../components/OverallFeedback";
-import StrengthCard from "../components/StrengthCard";
-import WeaknessCard from "../components/WeaknessCard";
-import QuestionPerformance from "../components/QuestionPerformance";
-import RecommendationCard from "../components/RecommendationCard";
+import ReportHeader from "../components/report/ReportHeader";
+import OverallFeedback from "../components/report/OverallFeedback";
+import StrengthCard from "../components/report/StrengthCard";
+import WeaknessCard from "../components/report/WeaknessCard";
+import RecommendationCard from "../components/report/RecommendationCard";
+import StrongDomainsSection from "../components/report/StrongDomainsSection";
+import WeakDomainsSection from "../components/report/WeakDomainsSection";
+import WeakSkillsSection from "../components/report/WeakSkillsSection";
+import HiringDecisionSection from "../components/report/HiringDecisionSection";
+
 
 function Report() {
 
@@ -99,25 +102,36 @@ function Report() {
                 company={report.company}
                 role={report.role}
                 overallScore={report.overall_score}
-                date={report.interview_date}
+                date={report.created_at}
             />
 
-            <ScoreCards
-
-                technical={report.technical}
-
-                communication={report.communication}
-
-                confidence={report.confidence}
-
-                problemSolving={report.problem_solving}
-            />
+        
             <OverallFeedback
-
+                summary={report.summary}
                 feedback={report.overall_feedback}
-
             />
+
             <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "25px",
+                    marginBottom: "30px"
+                }}
+            >
+
+                <StrongDomainsSection
+                    domains={report.strong_domains}
+                />
+
+                <WeakDomainsSection
+                    domains={report.weak_domains}
+                />
+
+            </div>
+
+
+          <div
                 style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr",
@@ -130,32 +144,23 @@ function Report() {
                     strengths={report.strengths}
                 />
 
-            </div>
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: "25px",
-                    marginBottom: "30px"
-                }}
-            >
-
-
                 <WeaknessCard
                     weaknesses={report.weaknesses}
                 />
 
             </div>
-
-            <QuestionPerformance
-
-                questions={report.questions}
-
+            <WeakSkillsSection
+                skills={report.weak_skills}
             />
+
+            
             <RecommendationCard
-
                 recommendations={report.recommendations}
+            />
 
+            <HiringDecisionSection
+                decision={report.hiring_decision}
+                justification={report.hiring_justification}
             />
 
 

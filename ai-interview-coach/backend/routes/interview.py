@@ -30,3 +30,14 @@ def interview(interview_id: int,current_user: Users = Depends(get_current_user))
         interview_id,
         current_user
     )
+    
+from crud.interview import get_all_interviews
+from schemas.interview import InterviewListResponse
+from typing import List
+
+@router.get(
+    "/interviews",
+    response_model=List[InterviewListResponse]
+)
+def interviews(current_user: Users = Depends(get_current_user)):
+    return get_all_interviews(current_user)

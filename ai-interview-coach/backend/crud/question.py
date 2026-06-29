@@ -7,11 +7,12 @@ from models.user import Users
 from schemas.question import QuestionAnswer
 from services.answer_evaluator import evaluate_answer
 from crud.report import generate_final_report
-from sqlalchemy.exc import SQLAlchemyError
 import traceback
+from utils.logger import logger
 
-def create_questions(interview_id: int, questions: list[str]):
+def create_questions(interview_id: int, questions: dict):
     try:
+        logger.info(f"Creating questions for interview {interview_id}")
         for q in questions["questions"]:
             question = Question(
                 interview_id=interview_id,
@@ -24,16 +25,16 @@ def create_questions(interview_id: int, questions: list[str]):
             )
             session.add(question)
 
+        session.commit()
         
+        logger.info("Questions saved successfully")
 
         return {"message": "Questions created successfully"}
 
 
     except SQLAlchemyError as e:
         session.rollback()
-
-        traceback.print_exc()
-        print("SQL ERROR:", repr(e))
+        logger.error(f"Failed to create questions: {e}")
 
         raise HTTPException(
             status_code=500,
@@ -92,6 +93,9 @@ def submit_answer(
 ):
 
     try:
+        logger.info(
+            f"Submitting answer for question {question_id}"
+        )
 
         # 1. Find Question
         question = session.query(Question).filter_by(
@@ -135,16 +139,12 @@ def submit_answer(
 
         except Exception as e:
 
-            if "RESOURCE_EXHAUSTED" in str(e) or "429" in str(e):
+            logger.error(f"AI evaluation failed: {e}")
 
-                raise HTTPException(
-                    status_code=429,
-                    detail="Gemini API quota exceeded. Please try again later.")
-                
             raise HTTPException(
                 status_code=500,
-                detail="Failed to evaluate answer.")
-
+                detail="AI evaluation failed.")
+            
         # 5. Save Evaluation
         question.user_answer = answer.user_answer
         question.score = evaluation["score"]
@@ -152,9 +152,16 @@ def submit_answer(
         question.correct_answer = evaluation["correct_answer"]
         question.strengths = evaluation["strengths"]
         question.improvements = evaluation["improvements"]
+        logger.info(
+            "Answer evaluated successfully"
+        )
 
         # 6. Commit
         session.commit()
+        session.refresh(question)
+        logger.info(
+            "Evaluation stored in database"
+        )
 
         # 7. Find Next Unanswered Question
         next_question = (
