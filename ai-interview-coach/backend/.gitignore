@@ -4,3 +4,27 @@ __pycache__/
 uploads/
 *.pyc
 logs/
+
+# virtual environment
+venv/
+.env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# Database (only if using SQLite)
+*.db
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
