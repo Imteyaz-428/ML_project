@@ -1,9 +1,8 @@
 import os
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
-from dotenv import load_dotenv
-from models.user import Base
 
 load_dotenv()
 
@@ -17,9 +16,7 @@ DATABASE_URL = (
 
 engine = create_engine(
     DATABASE_URL,
-    connect_args={
-        "ssl": {}
-    }
+    connect_args={"ssl": {}}
 )
 
 SessionLocal = sessionmaker(
@@ -28,3 +25,4 @@ SessionLocal = sessionmaker(
     bind=engine
 )
 
+Base = declarative_base()

@@ -1,11 +1,9 @@
 from sqlalchemy import Integer, String,Column
-from database.database import SessionLocal , engine
+
 from sqlalchemy.orm import declarative_base, relationship
 
 
-#base class
-Base = declarative_base()
-
+from database.database import Base
 #Model
 class Users(Base) :
     __tablename__ = "user_info"
@@ -19,7 +17,3 @@ class Users(Base) :
     password = Column(String(255), nullable=False)
     interviews = relationship("Interview", back_populates="user",cascade="all, delete")
     resumes = relationship("Resume",back_populates="user",uselist=False)
-
-
-#create engine 
-Base.metadata.create_all(engine)
