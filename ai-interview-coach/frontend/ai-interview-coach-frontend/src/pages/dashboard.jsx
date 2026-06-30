@@ -35,7 +35,7 @@ function Dashboard() {
             console.log(error);
     
             localStorage.removeItem("token");
-            navigate("/login");
+            navigate("/Login");
     
         }
     
@@ -58,7 +58,7 @@ function Dashboard() {
 
         localStorage.removeItem("token");
 
-        navigate("/login");
+        navigate("/Login");
 
     }
 

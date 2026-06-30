@@ -16,7 +16,7 @@ function App() {
       <Routes>
 
         <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/Login" element={<Login />} />
         <Route path="/resume" element={<Resume />} />
         <Route
           path="/interview-setup"

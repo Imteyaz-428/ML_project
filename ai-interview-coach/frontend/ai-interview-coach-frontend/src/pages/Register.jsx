@@ -43,7 +43,7 @@ function Register() {
 
             alert("Registration Successful 🎉");
 
-            navigate("/login");
+            navigate("/Login");
 
         }
 
@@ -192,7 +192,7 @@ function Register() {
                 >
                     Already have an account?{" "}
                     <span
-                        onClick={() => navigate("/login")}
+                        onClick={() => navigate("/Login")}
                         style={{
                             color: "#1976d2",
                             fontWeight: "bold",

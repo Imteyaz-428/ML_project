@@ -8,7 +8,7 @@ function DashboardHeader() {
 
         localStorage.removeItem("token");
 
-        navigate("/login");
+        navigate("/Login");
 
     }
 
