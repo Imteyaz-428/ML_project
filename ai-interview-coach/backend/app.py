@@ -13,6 +13,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "https://ai-interview-coach-frontend-three.vercel.app",
+        "https://ai-interview-coach-frontend-kov5h0p5b-imteyaz-428s-projects.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
