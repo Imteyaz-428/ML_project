@@ -5,7 +5,7 @@ import Dashboard from "./pages/dashboard";
 import Resume from "./pages/resume";
 import Report from "./pages/report";
 import Interview from "./pages/interview";
-import InterviewSetup from "./pages/interviewSetUp";
+import InterviewSetup from "./pages/interviewSetup";
 import Profile from "./pages/profile";
 import Interviews from "./pages/Interviews";
 import AnalysisPage from "./pages/AnalysisPage";
