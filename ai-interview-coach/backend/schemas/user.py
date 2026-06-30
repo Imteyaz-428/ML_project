@@ -14,7 +14,7 @@ class User(BaseModel) :
 class User_update(BaseModel) :
     Email : EmailStr
     Name : Annotated[Optional[str], Field(default=None)]
-    Age : Annotated[Optional[int], Field(default=None,gt=0,l=150)]
+    Age : Annotated[Optional[int], Field(default=None,gt=0,lt=150)]
     Gender : Optional[Literal['male', 'female', 'other']]= None
     Trade : Annotated[Optional[str], Field(default=None)]
     password : Annotated[Optional[str], Field(default=None)]

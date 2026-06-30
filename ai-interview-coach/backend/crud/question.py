@@ -6,7 +6,7 @@ from models.interview import Interview
 from models.user import Users
 from schemas.question import QuestionAnswer
 from services.answer_evaluator import evaluate_answer
-from crud.report import generate_final_report
+from crud.report import (generate_final_report,get_interview_report)
 import traceback
 from utils.logger import logger
 
@@ -173,8 +173,15 @@ def submit_answer(
             .order_by(Question.id)
             .first()
         )
-        if  next_question is None:
-            report = generate_final_report(question.interview_id)
+        if next_question is None:
+
+            generate_final_report(question.interview_id)
+
+            report = get_interview_report(
+                question.interview_id,
+                current_user
+            )
+
             return {
                 "completed": True,
                 "evaluation": evaluation,
