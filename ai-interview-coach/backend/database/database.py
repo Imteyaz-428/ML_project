@@ -25,4 +25,17 @@ SessionLocal = sessionmaker(
     bind=engine
 )
 
+session = SessionLocal()
+
+# ✅ Create Base FIRST
 Base = declarative_base()
+
+# ✅ Then import all models
+from models.user import Users
+from models.interview import Interview
+from models.question import Question
+from models.report import InterviewReport
+from models.resume import Resume
+
+# ✅ Finally create all tables
+Base.metadata.create_all(bind=engine)
