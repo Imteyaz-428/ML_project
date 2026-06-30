@@ -1,21 +1,30 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
-
-#database connection 
-DATABASE_URL = "mysql+pymysql://interview:password123@localhost/user_db"
-
-engine = create_engine(DATABASE_URL)
-
-SessionLocal  = sessionmaker(
-    autoflush= False,
-    autocommit = False,
-    bind = engine
-)
-session = SessionLocal()
+from dotenv import load_dotenv
 from models.user import Base
-from models.user import Users
-from models.interview import Interview
-from models.question import Question
-from models.report import InterviewReport
-from models.resume import Resume
-Base.metadata.create_all(bind=engine)
+
+load_dotenv()
+
+DATABASE_URL = (
+    f"mysql+pymysql://{os.getenv('DB_USER')}:"
+    f"{os.getenv('DB_PASSWORD')}@"
+    f"{os.getenv('DB_HOST')}:"
+    f"{os.getenv('DB_PORT')}/"
+    f"{os.getenv('DB_NAME')}"
+)
+
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={
+        "ssl": {}
+    }
+)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
+
