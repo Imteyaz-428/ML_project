@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const API = "http://127.0.0.1:8000";
+const API = "https://ai-interview-backend-p8gl.onrender.com";
 
 export default function UploadPage() {
   const navigate = useNavigate();
