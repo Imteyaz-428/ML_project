@@ -2,8 +2,7 @@ from sqlalchemy import Integer, String,Column
 
 from sqlalchemy.orm import declarative_base, relationship
 
-
-from database.database import Base
+Base = declarative_base()
 #Model
 class Users(Base) :
     __tablename__ = "user_info"

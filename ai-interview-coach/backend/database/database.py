@@ -25,10 +25,9 @@ SessionLocal = sessionmaker(
     bind=engine
 )
 
-session = SessionLocal()
 
 # ✅ Create Base FIRST
-Base = declarative_base()
+from models.user import Base
 
 # ✅ Then import all models
 from models.user import Users
@@ -39,3 +38,9 @@ from models.resume import Resume
 
 # ✅ Finally create all tables
 Base.metadata.create_all(bind=engine)
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

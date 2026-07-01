@@ -1,8 +1,11 @@
 from jose import jwt, JWTError
+import os
 from fastapi import HTTPException
 from datetime import datetime, timedelta
 
-SECRET_KEY = "your_super_secret_key"
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY is not set in .env file!")
 
 ALGORITHM = "HS256"
 

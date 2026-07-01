@@ -16,7 +16,7 @@ def upload_resume(resume: UploadFile, current_user: Users):
     # 1. Validate file type
     if resume.content_type != "application/pdf":
         raise HTTPException(
-            status_code=400,
+            status_code=422,
             detail="Only PDF files are allowed."
         )
 
