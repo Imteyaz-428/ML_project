@@ -14,7 +14,6 @@ router = APIRouter(
 )
 
 
-
 # ✅ FIX 4: /interviews route MUST come BEFORE /{interview_id}
 # FastAPI matches routes top-to-bottom. Previously /{interview_id} was
 # registered first, so GET /interview/interviews was captured by it and
