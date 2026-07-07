@@ -26,9 +26,7 @@ def create_user(user_data: User, db: Session):
 
     except IntegrityError:
         db.rollback()
-        # ✅ FIX 7: Changed status_code from 404 → 409 (Conflict)
-        # 404 means "Not Found" which is wrong for a duplicate email scenario.
-        # 409 Conflict is the correct HTTP status for "resource already exists".
+       
         raise HTTPException(
             status_code=409,
             detail="Email already registered"

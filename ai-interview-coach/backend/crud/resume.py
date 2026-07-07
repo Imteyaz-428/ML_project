@@ -14,9 +14,7 @@ from services.gemini_service import extract_resume_information
 
 def upload_resume(resume: UploadFile, current_user: Users, db: Session):
 
-    # ✅ FIX 5: Changed status_code from 400 → 422
-    # The frontend checks for status 422 to show "Invalid file" error.
-    # Returning 400 meant the frontend showed a generic error instead.
+    
     if resume.content_type != "application/pdf":
         raise HTTPException(
             status_code=422,

@@ -14,10 +14,6 @@ router = APIRouter(
 )
 
 
-# ✅ FIX 4: /interviews route MUST come BEFORE /{interview_id}
-# FastAPI matches routes top-to-bottom. Previously /{interview_id} was
-# registered first, so GET /interview/interviews was captured by it and
-# tried to cast "interviews" as an int → 422 error. The route was unreachable.
 @router.get(
     "/interviews",
     response_model=List[InterviewListResponse]
@@ -46,7 +42,7 @@ def my_interviews(
     return get_my_interviews(current_user, db)
 
 
-# ✅ This wildcard route is now LAST — won't swallow /interviews anymore
+#  This wildcard route is now LAST — won't swallow /interviews anymore
 @router.get("/{interview_id}")
 def interview(
     interview_id: int,

@@ -53,12 +53,10 @@ function Report() {
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "25px", marginBottom: "30px" }}>
 
-                {/* ✅ FIX 6a: Was `domains={...}` → must be `strongDomains={...}`
-                    StrongDomainsSection expects prop named `strongDomains`.
-                    Wrong prop name = component receives undefined = renders nothing. */}
+                
                 <StrongDomainsSection strongDomains={report.strong_domains} />
 
-                {/* ✅ FIX 6b: Was `domains={...}` → must be `weakDomains={...}` */}
+                
                 <WeakDomainsSection weakDomains={report.weak_domains} />
 
             </div>
@@ -68,15 +66,12 @@ function Report() {
                 <WeaknessCard weaknesses={report.weaknesses} />
             </div>
 
-            {/* ✅ FIX 6c: Was `skills={...}` → must be `weakSkills={...}`
-                WeakSkillsSection expects prop named `weakSkills`. */}
+            
             <WeakSkillsSection weakSkills={report.weak_skills} />
 
             <RecommendationCard recommendations={report.recommendations} />
 
-            {/* ✅ FIX 6d: Was `decision={...}` / `justification={...}`
-                HiringDecisionSection expects `hiringDecision` and `hiringJustification`.
-                Wrong prop names = hiring decision card always renders nothing. */}
+        
             <HiringDecisionSection
                 hiringDecision     ={report.hiring_decision}
                 hiringJustification={report.hiring_justification}
